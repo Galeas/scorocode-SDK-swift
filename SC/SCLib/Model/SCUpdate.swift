@@ -8,29 +8,29 @@
 
 import Foundation
 
-struct SCUpdate {
+public struct SCUpdate {
     
     private var _operators = [SCUpdateOperator]()
-    var operators: [SCUpdateOperator] {
+    public var operators: [SCUpdateOperator] {
         return _operators
     }
 
-    mutating func addOperator(oper: SCUpdateOperator) {
+    public mutating func addOperator(oper: SCUpdateOperator) {
         _operators.append(oper)
     }
 
-    mutating func set(dic: [String: SCValue]) {
+    public mutating func set(dic: [String: SCValue]) {
         let op = SCUpdateOperator.Set(dic)
         addOperator(op)
     }
 
     
-    mutating func push(name: String, _ value: SCValue) {
+    public mutating func push(name: String, _ value: SCValue) {
         let op = SCUpdateOperator.Push(name: name, value: value, each: false)
         addOperator(op)
     }
     
-    mutating func pushEach(name: String, _ value: SCValue) {
+    public mutating func pushEach(name: String, _ value: SCValue) {
         guard value is SCArray else {
             print("Wrong value type - should be SCArray")
             return
@@ -40,12 +40,12 @@ struct SCUpdate {
         addOperator(op)
     }
     
-    mutating func pull(name: String, _ value: SCPullable) {
+    public mutating func pull(name: String, _ value: SCPullable) {
         let op = SCUpdateOperator.Pull(name, value)
         addOperator(op)
     }
 
-    mutating func pullAll(name: String, _ value: SCValue) {
+    public mutating func pullAll(name: String, _ value: SCValue) {
         guard value is SCArray else {
             print("Wrong value type - should be SCArray")
             return
@@ -55,17 +55,17 @@ struct SCUpdate {
         addOperator(op)
     }
     
-    mutating func addToSet(name: String, _ value: SCValue) {
+    public mutating func addToSet(name: String, _ value: SCValue) {
         let op = SCUpdateOperator.AddToSet(name: name, value: value, each: false)
         addOperator(op)
     }
     
-    mutating func addToSetEach(name: String, _ value: SCValue) {
+    public mutating func addToSetEach(name: String, _ value: SCValue) {
         let op = SCUpdateOperator.AddToSet(name: name, value: value, each: true)
         addOperator(op)
     }
     
-    mutating func pop(name: String, _ value: Int) {
+    public mutating func pop(name: String, _ value: Int) {
         guard value == 1 || value == -1 else {
             print("Wrong value")
             return
@@ -74,7 +74,7 @@ struct SCUpdate {
         addOperator(op)
     }
     
-    mutating func inc(name: String, _ value: SCValue) {
+    public mutating func inc(name: String, _ value: SCValue) {
         guard value is SCDouble || value is SCInt else {
             print("Wrong value type")
             return
@@ -83,7 +83,7 @@ struct SCUpdate {
         addOperator(op)
     }
     
-    mutating func currentDate(name: String, typeSpec: String) {
+    public mutating func currentDate(name: String, typeSpec: String) {
         guard typeSpec == "date" || typeSpec == "timestamp" else {
             print("Wrong type specification")
             return
@@ -92,7 +92,7 @@ struct SCUpdate {
         addOperator(op)
     }
 
-    mutating func mul(name: String, _ value: SCValue) {
+    public mutating func mul(name: String, _ value: SCValue) {
         guard value is SCDouble || value is SCInt else {
             print("Wrong value type")
             return
@@ -101,12 +101,12 @@ struct SCUpdate {
         addOperator(op)
     }
 
-    mutating func min(name: String, _ value: SCValue) {
+    public mutating func min(name: String, _ value: SCValue) {
         let op = SCUpdateOperator.Min(name, value)
         addOperator(op)
     }
     
-    mutating func max(name: String, _ value: SCValue) {
+    public mutating func max(name: String, _ value: SCValue) {
         let op = SCUpdateOperator.Max(name, value)
         addOperator(op)
     }

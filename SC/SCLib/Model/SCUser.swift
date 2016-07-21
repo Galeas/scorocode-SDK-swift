@@ -8,26 +8,26 @@
 
 import Foundation
 
-class SCUser: SCObject {
+public class SCUser: SCObject {
     
-    init() {
+    public init() {
         super.init(collection: "users", id: nil)
     }
     
     // Аутентификация пользователя приложения
-    func login(email: String, password: String, callback: (Bool, SCError?, [String: AnyObject]?) -> Void) {
+    public func login(email: String, password: String, callback: (Bool, SCError?, [String: AnyObject]?) -> Void) {
         
         SCAPI.sharedInstance.login(email, password: password, callback: callback)
     }
     
     // Завершение активной сессии пользователя
-    static func logout(callback: (Bool, SCError?) -> Void) {
+    public static func logout(callback: (Bool, SCError?) -> Void) {
         
         SCAPI.sharedInstance.logout(callback)
     }
     
     // Метод для регистрации нового пользователя в приложении. Поля устанавливаются методами родительского класса Object.
-    func signup(callback: (Bool, SCError?, [String: AnyObject]?) -> Void) {
+    public func signup(callback: (Bool, SCError?, [String: AnyObject]?) -> Void) {
         guard let username = get("username") as? String,
             email = get("email") as? String,
             password = get("password") as? String else { return }
@@ -35,7 +35,7 @@ class SCUser: SCObject {
         signup(username, email: email, password: password, callback: callback)
     }
     
-    func signup(username: String, email: String, password: String, callback: (Bool, SCError?, [String: AnyObject]?) -> Void) {
+    public func signup(username: String, email: String, password: String, callback: (Bool, SCError?, [String: AnyObject]?) -> Void) {
         
         SCAPI.sharedInstance.register(username, email: email, password: password, callback: callback)
     }

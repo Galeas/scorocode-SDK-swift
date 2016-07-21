@@ -9,7 +9,7 @@
 import Foundation
 import SwiftyJSON
 
-enum SCUpdateOperator: Equatable {
+public enum SCUpdateOperator: Equatable {
     
 //    case Set(String, SCValue)
     case Set([String: SCValue])
@@ -24,7 +24,7 @@ enum SCUpdateOperator: Equatable {
     case Min(String, SCValue)
     case Max(String, SCValue)
 
-    var name: String {
+    public var name: String {
         switch self {
         case .Set:
             return "$set"
@@ -51,7 +51,7 @@ enum SCUpdateOperator: Equatable {
         }
     }
     
-    var dic: AnyObject {
+    public var dic: AnyObject {
         
         switch self {
             
@@ -114,7 +114,7 @@ enum SCUpdateOperator: Equatable {
     
 }
 
-func ==(lhs: SCUpdateOperator, rhs: SCUpdateOperator) -> Bool {
+public func ==(lhs: SCUpdateOperator, rhs: SCUpdateOperator) -> Bool {
     switch (lhs, rhs) {
         
 //    case (let SCUpdateOperator.Set(name1, v1), let SCUpdateOperator.Set(name2, v2)):

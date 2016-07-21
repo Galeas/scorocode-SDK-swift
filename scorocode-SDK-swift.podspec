@@ -1,8 +1,8 @@
 Pod::Spec.new do |s|
 
   s.name         = "scorocode-SDK-swift"
-  s.version      = "1.1"
-  s.summary      = "SDK предоставляет доступ к платформе Scorocode."
+  s.version      = "1.1.1"
+  s.summary      = "SDK предоставляет доступ к платформе Scorocode (https://scorocode.ru)"
 
   s.description  = <<-DESC
                     SDK предоставляет доступ к платформе Scorocode. Подробности на нашем сайте: https://scorocode.ru

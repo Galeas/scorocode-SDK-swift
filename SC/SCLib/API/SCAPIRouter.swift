@@ -10,7 +10,7 @@ import Foundation
 import Alamofire
 import SwiftyJSON
 
-enum SCAPIRouter: URLRequestConvertible {
+public enum SCAPIRouter: URLRequestConvertible {
     
     private static let baseURLString = "https://api.scorocode.ru/api/v1/"
     
@@ -33,7 +33,7 @@ enum SCAPIRouter: URLRequestConvertible {
     case Scripts([String: AnyObject])
     case Stat([String: AnyObject])
     
-    var URLRequest: NSMutableURLRequest {
+    public var URLRequest: NSMutableURLRequest {
         
         var method: Alamofire.Method {
         

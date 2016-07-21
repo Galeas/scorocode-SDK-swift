@@ -10,12 +10,12 @@ import Foundation
 import Alamofire
 import SwiftyJSON
 
-enum SCError {
+public enum SCError {
     case System(String)
     case API(String, String)
 }
 
-class SCAPI {
+public class SCAPI {
     
     private let kApplicationId = "app"
     private let kClientKey = "cli"
@@ -41,7 +41,7 @@ class SCAPI {
     private let kFile = "file"
     private let kContent = "content"
     
-    static let sharedInstance = SCAPI()
+    public static let sharedInstance = SCAPI()
     
     internal var applicationId = ""
     internal var clientId = ""
@@ -49,10 +49,10 @@ class SCAPI {
     internal var fileKey = ""
     internal var messageKey = ""
     
-    var sessionId: String!
+    public var sessionId: String!
     
     // MARK: User
-    func login(email: String, password: String, callback: (Bool, SCError?, [String: AnyObject]?) -> Void) {
+    public func login(email: String, password: String, callback: (Bool, SCError?, [String: AnyObject]?) -> Void) {
         
         var body = [String: String]()
         body[kApplicationId] = applicationId
@@ -85,7 +85,7 @@ class SCAPI {
         
     }
     
-    func logout(callback: (Bool, SCError?) -> Void) {
+    public func logout(callback: (Bool, SCError?) -> Void) {
         
         var body = [String: String]()
         body[kApplicationId] = applicationId
@@ -112,7 +112,7 @@ class SCAPI {
         }
     }
     
-    func register(username: String, email: String, password: String, callback: (Bool, SCError?, [String: AnyObject]?) -> Void) {
+    public func register(username: String, email: String, password: String, callback: (Bool, SCError?, [String: AnyObject]?) -> Void) {
         
         var body = [String: AnyObject]()
         body[kApplicationId] = applicationId
@@ -144,7 +144,7 @@ class SCAPI {
     
     
     // MARK: Object
-    func insert(doc: SCObject, callback: (Bool, SCError?, [String: AnyObject]?) -> Void) {
+    public func insert(doc: SCObject, callback: (Bool, SCError?, [String: AnyObject]?) -> Void) {
         
         var body = [String: AnyObject]()
         body[kApplicationId] = applicationId
@@ -184,7 +184,7 @@ class SCAPI {
         }
     }
     
-    func remove(query: SCQuery, callback: (Bool, SCError?, [String: AnyObject]?) -> Void) {
+    public func remove(query: SCQuery, callback: (Bool, SCError?, [String: AnyObject]?) -> Void) {
         
         var body = [String: AnyObject]()
         body[kApplicationId] = applicationId
@@ -218,7 +218,7 @@ class SCAPI {
         }
     }
     
-    func update(query: SCQuery, update: SCUpdate, callback: (Bool, SCError?, [String: AnyObject]?) -> Void) {
+    public func update(query: SCQuery, update: SCUpdate, callback: (Bool, SCError?, [String: AnyObject]?) -> Void) {
         
         var body = [String: AnyObject]()
         body[kApplicationId] = applicationId
@@ -249,7 +249,7 @@ class SCAPI {
         }
     }
     
-    func updateById(obj: SCObject, callback: (Bool, SCError?, [String: AnyObject]?) -> Void) {
+    public func updateById(obj: SCObject, callback: (Bool, SCError?, [String: AnyObject]?) -> Void) {
         
         var body = [String: AnyObject]()
         body[kApplicationId] = applicationId
@@ -281,7 +281,7 @@ class SCAPI {
         }
     }
     
-    func find(query: SCQuery, callback: (Bool, SCError?, [String: AnyObject]?) -> Void) {
+    public func find(query: SCQuery, callback: (Bool, SCError?, [String: AnyObject]?) -> Void) {
         
         var body = [String: AnyObject]()
         body[kApplicationId] = applicationId
@@ -332,7 +332,7 @@ class SCAPI {
         }
     }
     
-    func count(query: SCQuery, callback: (Bool, SCError?, Int?) -> Void) {
+    public func count(query: SCQuery, callback: (Bool, SCError?, Int?) -> Void) {
         
         var body = [String: AnyObject]()
         body[kApplicationId] = applicationId
@@ -362,7 +362,7 @@ class SCAPI {
         }
     }
     
-    func getFile(collection: String, field: String, filename: String, callback: (Bool, SCError?) -> Void) {
+    public func getFile(collection: String, field: String, filename: String, callback: (Bool, SCError?) -> Void) {
         
         let destination = Alamofire.Request.suggestedDownloadDestination(directory: .DocumentDirectory, domain: .UserDomainMask)
         print("The file will be saved in \(destination)")
@@ -381,7 +381,7 @@ class SCAPI {
 
     }
     
-    func getFileLink(collection: String, fieldName: String, filename: String, callback: (Bool, SCError?, NSURL?) -> Void) {
+    public func getFileLink(collection: String, fieldName: String, filename: String, callback: (Bool, SCError?, NSURL?) -> Void) {
         var body = [String: AnyObject]()
         body[kApplicationId] = applicationId
         body[kClientKey] = clientId
@@ -410,7 +410,7 @@ class SCAPI {
     }
     
     // MARK: File
-    func upload(field: String, filename: String, data: String, docId: String,  collection: String, callback: (Bool, SCError?) -> Void) {
+    public func upload(field: String, filename: String, data: String, docId: String,  collection: String, callback: (Bool, SCError?) -> Void) {
         
         var body = [String: AnyObject]()
         body[kApplicationId] = applicationId
@@ -443,7 +443,7 @@ class SCAPI {
         }
     }
     
-    func deleteFile(field: String, filename: String, docId: String, collection: String, callback: (Bool, SCError?) -> Void) {
+    public func deleteFile(field: String, filename: String, docId: String, collection: String, callback: (Bool, SCError?) -> Void) {
         
         var body = [String: AnyObject]()
         body[kApplicationId] = applicationId
@@ -477,7 +477,7 @@ class SCAPI {
 
     
     // MARK: Message
-    func sendEmail(query: SCQuery, subject: String, text: String, callback: (Bool, SCError?, Int?) -> Void) {
+    public func sendEmail(query: SCQuery, subject: String, text: String, callback: (Bool, SCError?, Int?) -> Void) {
         
         var body = [String: AnyObject]()
         body[kApplicationId] = applicationId
@@ -508,7 +508,7 @@ class SCAPI {
         }
     }
     
-    func sendPush(query: SCQuery, subject: String, text: String, callback: (Bool, SCError?, Int?) -> Void) {
+    public func sendPush(query: SCQuery, subject: String, text: String, callback: (Bool, SCError?, Int?) -> Void) {
         var body = [String: AnyObject]()
         body[kApplicationId] = applicationId
         body[kClientKey] = clientId
@@ -539,7 +539,7 @@ class SCAPI {
         }
     }
     
-    func sendSms(query: SCQuery, subject: String, text: String, callback: (Bool, SCError?, Int?) -> Void) {
+    public func sendSms(query: SCQuery, subject: String, text: String, callback: (Bool, SCError?, Int?) -> Void) {
         var body = [String: AnyObject]()
         body[kApplicationId] = applicationId
         body[kClientKey] = clientId
@@ -573,7 +573,7 @@ class SCAPI {
     
     
     // MARK: Script
-    func scripts(scriptId: String, pool: [String: AnyObject], callback: (Bool, SCError?) -> Void) {
+    public func scripts(scriptId: String, pool: [String: AnyObject], callback: (Bool, SCError?) -> Void) {
         var body = [String: AnyObject]()
         body[kApplicationId] = applicationId
         body[kClientKey] = clientId
@@ -601,7 +601,7 @@ class SCAPI {
         }
     }
     
-    func stat(callback: (Bool, SCError?, [String: AnyObject]?) -> Void) {
+    public func stat(callback: (Bool, SCError?, [String: AnyObject]?) -> Void) {
         var body = [String: AnyObject]()
         body[kApplicationId] = applicationId
         body[kClientKey] = clientId
@@ -627,17 +627,17 @@ class SCAPI {
         }
     }
     
-    func makeError(response: JSON) -> SCError {
+    public func makeError(response: JSON) -> SCError {
         let errCode = response["errCode"].stringValue
         let errMsg = response["errMsg"].stringValue
         return SCError.API(errCode, errMsg)
     }
     
-    func makeMessage(subject: String, text: String) -> [String: String] {
+    public func makeMessage(subject: String, text: String) -> [String: String] {
         return [kMessageSubject: subject, kMessageText: text]
     }
     
-    func makeBodyDoc(update: SCUpdate) -> [String: AnyObject] {
+    public func makeBodyDoc(update: SCUpdate) -> [String: AnyObject] {
         var result = [String: AnyObject]()
         for op in update.operators {
             result[op.name] = op.dic
@@ -645,7 +645,7 @@ class SCAPI {
         return result
     }
     
-    func makeBodyQuery(query: SCQuery) -> [String: AnyObject] {
+    public func makeBodyQuery(query: SCQuery) -> [String: AnyObject] {
         
         if let userQuery = query.userQuery {
             return userQuery

@@ -17,7 +17,7 @@ Pod::Spec.new do |s|
   s.ios.deployment_target = "8.0"
 
   s.source       = { :git => "https://github.com/Galeas/scorocode-SDK-swift.git", :tag => s.version }
-  s.source_files  = "SC/SCLib/**/*.{h,m}"
+  s.source_files  = "SC/SCLib/**/*.{h,m,swift}"
 
   s.dependency "Alamofire", "~> 3.3"
   s.dependency "SwiftyJSON"

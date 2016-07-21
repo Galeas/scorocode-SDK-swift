@@ -1,12 +1,13 @@
 Pod::Spec.new do |s|
 
   s.name         = "scorocode-SDK-swift"
-  s.version      = "1.1.1"
-  s.summary      = "SDK предоставляет доступ к платформе Scorocode (https://scorocode.ru)"
-
-  s.description  = <<-DESC
-                    SDK предоставляет доступ к платформе Scorocode. Подробности на нашем сайте: https://scorocode.ru
+  s.version      = "1.1.2"
+  s.summary      = <<-DESC
+                    SDK предоставляет доступ к платформе Scorocode (https://scorocode.ru)\nSDK provides access to Scorocode platform (https://scorocode.ru)
                    DESC
+
+  s.description  = "SDK предоставляет доступ к платформе Scorocode. Подробности на нашем сайте: https://scorocode.ru
+                    SDK provides access to Scorocode platform. Details on our site: https://scorocode.ru"
 
   s.homepage     = "https://github.com/Galeas/scorocode-SDK-swift"
   s.license      = { :type => "MIT", :file => "LICENSE" }

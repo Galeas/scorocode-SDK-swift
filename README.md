@@ -5,6 +5,11 @@ SDK предоставляет доступ к платформе Scorocode дл
 ### Установка
 Подключение библиотеки к проекту
 
+#### CocoaPods
+Добавить в ```Podfile``` строку ```pod 'scorocode-SDK-swift'```
+
+#### Carthage
+
 Установить [Carthage](https://github.com/Carthage/Carthage)
 
 Создать приложение

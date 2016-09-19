@@ -24,7 +24,7 @@ public struct SCBool: SCValue {
     }
 
     public var apiValue: AnyObject {
-        return value
+        return value as AnyObject
     }
 }
 
@@ -36,7 +36,7 @@ public struct SCString: SCValue {
     }
 
     public var apiValue: AnyObject {
-        return value
+        return value as AnyObject
     }
 }
 
@@ -48,7 +48,7 @@ public struct SCInt: SCValue {
     }
     
     public var apiValue: AnyObject {
-        return value
+        return value as AnyObject
     }
 }
 
@@ -60,24 +60,24 @@ public struct SCDouble: SCValue {
     }
     
     public var apiValue: AnyObject {
-        return value
+        return value as AnyObject
     }
 }
 
 public struct SCDate: SCValue {
-    public let value: NSDate
+    public let value: Date
     
-    public init(_ value: NSDate) {
+    public init(_ value: Date) {
         self.value = value
     }
     
     public var apiValue: AnyObject {
-        let en_US_POSIX = NSLocale(localeIdentifier: "en_US_POSIX")
-        let rfc3339DateFormatter = NSDateFormatter()
+        let en_US_POSIX = Locale(identifier: "en_US_POSIX")
+        let rfc3339DateFormatter = DateFormatter()
         rfc3339DateFormatter.locale = en_US_POSIX
         rfc3339DateFormatter.dateFormat = "yyyy'-'MM'-'dd'T'HH':'mm':'ssXXX"
-        rfc3339DateFormatter.timeZone = NSTimeZone(forSecondsFromGMT: 0)
-        return rfc3339DateFormatter.stringFromDate(value)
+        rfc3339DateFormatter.timeZone = TimeZone(secondsFromGMT: 0)
+        return rfc3339DateFormatter.string(from: value) as AnyObject
     }
 }
 
@@ -105,7 +105,7 @@ public struct SCDictionary: SCValue {
         for (key, val) in value {
             result[key] = val.apiValue
         }
-        return result
+        return result as AnyObject
     }
 }
 
@@ -113,7 +113,7 @@ public func == (lhs: [SCValue], rhs: [SCValue]) -> Bool {
     if lhs.count != rhs.count {
         return false
     }
-    for (index, leftValue) in lhs.enumerate() {
+    for (index, leftValue) in lhs.enumerated() {
         if leftValue != rhs[index] {
             return false
         }

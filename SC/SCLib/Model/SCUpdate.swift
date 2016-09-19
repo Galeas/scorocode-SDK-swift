@@ -10,104 +10,104 @@ import Foundation
 
 public struct SCUpdate {
     
-    private var _operators = [SCUpdateOperator]()
+    fileprivate var _operators = [SCUpdateOperator]()
     public var operators: [SCUpdateOperator] {
         return _operators
     }
 
-    public mutating func addOperator(oper: SCUpdateOperator) {
+    public mutating func addOperator(_ oper: SCUpdateOperator) {
         _operators.append(oper)
     }
 
-    public mutating func set(dic: [String: SCValue]) {
-        let op = SCUpdateOperator.Set(dic)
+    public mutating func set(_ dic: [String: SCValue]) {
+        let op = SCUpdateOperator.set(dic)
         addOperator(op)
     }
 
     
-    public mutating func push(name: String, _ value: SCValue) {
-        let op = SCUpdateOperator.Push(name: name, value: value, each: false)
+    public mutating func push(_ name: String, _ value: SCValue) {
+        let op = SCUpdateOperator.push(name: name, value: value, each: false)
         addOperator(op)
     }
     
-    public mutating func pushEach(name: String, _ value: SCValue) {
+    public mutating func pushEach(_ name: String, _ value: SCValue) {
         guard value is SCArray else {
             print("Wrong value type - should be SCArray")
             return
         }
         
-        let op = SCUpdateOperator.Push(name: name, value: value, each: true)
+        let op = SCUpdateOperator.push(name: name, value: value, each: true)
         addOperator(op)
     }
     
-    public mutating func pull(name: String, _ value: SCPullable) {
-        let op = SCUpdateOperator.Pull(name, value)
+    public mutating func pull(_ name: String, _ value: SCPullable) {
+        let op = SCUpdateOperator.pull(name, value)
         addOperator(op)
     }
 
-    public mutating func pullAll(name: String, _ value: SCValue) {
+    public mutating func pullAll(_ name: String, _ value: SCValue) {
         guard value is SCArray else {
             print("Wrong value type - should be SCArray")
             return
         }
         
-        let op = SCUpdateOperator.PullAll(name, value)
+        let op = SCUpdateOperator.pullAll(name, value)
         addOperator(op)
     }
     
-    public mutating func addToSet(name: String, _ value: SCValue) {
-        let op = SCUpdateOperator.AddToSet(name: name, value: value, each: false)
+    public mutating func addToSet(_ name: String, _ value: SCValue) {
+        let op = SCUpdateOperator.addToSet(name: name, value: value, each: false)
         addOperator(op)
     }
     
-    public mutating func addToSetEach(name: String, _ value: SCValue) {
-        let op = SCUpdateOperator.AddToSet(name: name, value: value, each: true)
+    public mutating func addToSetEach(_ name: String, _ value: SCValue) {
+        let op = SCUpdateOperator.addToSet(name: name, value: value, each: true)
         addOperator(op)
     }
     
-    public mutating func pop(name: String, _ value: Int) {
+    public mutating func pop(_ name: String, _ value: Int) {
         guard value == 1 || value == -1 else {
             print("Wrong value")
             return
         }
-        let op = SCUpdateOperator.Pop(name, value)
+        let op = SCUpdateOperator.pop(name, value)
         addOperator(op)
     }
     
-    public mutating func inc(name: String, _ value: SCValue) {
+    public mutating func inc(_ name: String, _ value: SCValue) {
         guard value is SCDouble || value is SCInt else {
             print("Wrong value type")
             return
         }
-        let op = SCUpdateOperator.Inc(name, value)
+        let op = SCUpdateOperator.inc(name, value)
         addOperator(op)
     }
     
-    public mutating func currentDate(name: String, typeSpec: String) {
+    public mutating func currentDate(_ name: String, typeSpec: String) {
         guard typeSpec == "date" || typeSpec == "timestamp" else {
             print("Wrong type specification")
             return
         }
-        let op = SCUpdateOperator.CurrentDate(name, typeSpec)
+        let op = SCUpdateOperator.currentDate(name, typeSpec)
         addOperator(op)
     }
 
-    public mutating func mul(name: String, _ value: SCValue) {
+    public mutating func mul(_ name: String, _ value: SCValue) {
         guard value is SCDouble || value is SCInt else {
             print("Wrong value type")
             return
         }
-        let op = SCUpdateOperator.Mul(name, value)
+        let op = SCUpdateOperator.mul(name, value)
         addOperator(op)
     }
 
-    public mutating func min(name: String, _ value: SCValue) {
-        let op = SCUpdateOperator.Min(name, value)
+    public mutating func min(_ name: String, _ value: SCValue) {
+        let op = SCUpdateOperator.min(name, value)
         addOperator(op)
     }
     
-    public mutating func max(name: String, _ value: SCValue) {
-        let op = SCUpdateOperator.Max(name, value)
+    public mutating func max(_ name: String, _ value: SCValue) {
+        let op = SCUpdateOperator.max(name, value)
         addOperator(op)
     }
     

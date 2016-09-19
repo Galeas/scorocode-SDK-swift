@@ -10,8 +10,8 @@ import Foundation
 
 struct SCNewObjectAttributes {
     var id: String?
-    var createdAt: NSDate?
-    var updatedAt: NSDate?
+    var createdAt: Date?
+    var updatedAt: Date?
     var readACL: [String]?
     var updateACL: [String]?
     var removeACL: [String]?
@@ -21,10 +21,10 @@ struct SCNewObjectAttributes {
     }
 }
 
-public class SCObject {
+open class SCObject {
     
-    private var _id: String?
-    public var id: String? {
+    fileprivate var _id: String?
+    open var id: String? {
         get {
             return _id
         }
@@ -33,15 +33,15 @@ public class SCObject {
         }
     }
     
-    private var _update = SCUpdate()
-    public var update: SCUpdate {
+    fileprivate var _update = SCUpdate()
+    open var update: SCUpdate {
         return _update
     }
     
-    public var data = [String: AnyObject]()
+    open var data = [String: AnyObject]()
     
-    private let _collection: String
-    public var collection: String {
+    fileprivate let _collection: String
+    open var collection: String {
         get {
             return _collection
         }
@@ -56,70 +56,70 @@ public class SCObject {
         self.init(collection: collection, id: nil)
     }
     
-    public func get(name: String) -> AnyObject? {
+    open func get(_ name: String) -> AnyObject? {
         return data[name]
     }
     
-    public func set(dic: [String: SCValue]) {
+    open func set(_ dic: [String: SCValue]) {
         _update.set(dic)
     }
     
-    public func push(name: String, _ value: SCValue) {
+    open func push(_ name: String, _ value: SCValue) {
         _update.push(name, value)
     }
     
-    public func pushEach(name: String, _ value: SCValue) {
+    open func pushEach(_ name: String, _ value: SCValue) {
         _update.pushEach(name, value)
     }
     
-    public func pull(name: String, _ value: SCPullable) {
+    open func pull(_ name: String, _ value: SCPullable) {
         _update.pull(name, value)
     }
     
-    public func pullAll(name: String, _ value: SCValue) {
+    open func pullAll(_ name: String, _ value: SCValue) {
         _update.pullAll(name, value)
     }
     
-    public func addToSet(name: String, _ value: SCValue) {
+    open func addToSet(_ name: String, _ value: SCValue) {
         _update.addToSet(name, value)
     }
     
-    public func addToSetEach(name: String, _ value: SCValue) {
+    open func addToSetEach(_ name: String, _ value: SCValue) {
         _update.addToSetEach(name, value)
     }
     
-    public func pop(name: String, _ value: Int) {
+    open func pop(_ name: String, _ value: Int) {
         _update.pop(name, value)
     }
     
-    public func inc(name: String, _ value: SCValue) {
+    open func inc(_ name: String, _ value: SCValue) {
         _update.inc(name, value)
     }
     
-    public func currentDate(name: String, typeSpec: String) {
+    open func currentDate(_ name: String, typeSpec: String) {
         _update.currentDate(name, typeSpec: typeSpec)
     }
     
-    public func mul(name: String, _ value: SCValue) {
+    open func mul(_ name: String, _ value: SCValue) {
         _update.mul(name, value)
     }
     
-    public func min(name: String, _ value: SCValue) {
+    open func min(_ name: String, _ value: SCValue) {
         _update.min(name, value)
     }
     
-    public func max(name: String, _ value: SCValue) {
+    open func max(_ name: String, _ value: SCValue) {
         _update.max(name, value)
     }
     
-    public class func getById(id: String, collection: String, callback: (Bool, SCError?, [String: AnyObject]?) -> Void) {
+    open class func getById(_ id: String, collection: String, callback: (Bool, SCError?, [String: AnyObject]?) -> Void) {
         
         var query = SCQuery(collection: collection)
         query.equalTo("_id", SCString(id))
         SCAPI.sharedInstance.find(query, callback: callback)
     }
     
-    public func save(callback: (Bool, SCError?, [String: AnyObject]?) -> Void) {
+    open func save(_ callback: (Bool, SCError?, [String: AnyObject]?) -> Void) {
         if _id != nil && _update.operators.count > 0 {
             SCAPI.sharedInstance.updateById(self, callback: callback)
         } else {
@@ -128,9 +128,9 @@ public class SCObject {
     }
     
     // Удаляет текущий документ
-    public func remove(callback: (Bool, SCError?, [String: AnyObject]?) -> Void) {
+    open func remove(_ callback: (Bool, SCError?, [String: AnyObject]?) -> Void) {
         guard _id != nil else {
-            callback(false, SCError.System("Id не заполнен"), nil)
+            callback(false, SCError.system("Id не заполнен"), nil)
             return
         }
         
@@ -139,26 +139,26 @@ public class SCObject {
         SCAPI.sharedInstance.remove(query, callback: callback)
     }
     
-    public func upload(field: String, filename: String, data: NSData, callback: (Bool, SCError?) -> Void) {
+    open func upload(_ field: String, filename: String, data: Data, callback: (Bool, SCError?) -> Void) {
         
         guard let id = _id else { return }
         
-        let encodedData = data.base64EncodedStringWithOptions(NSDataBase64EncodingOptions())
+        let encodedData = data.base64EncodedString(options: NSData.Base64EncodingOptions())
         SCAPI.sharedInstance.upload(field, filename: filename, data: encodedData, docId: id, collection: collection, callback: callback)
     }
     
-    public func deleteFile(field: String, filename: String, callback: (Bool, SCError?) -> Void) {
+    open func deleteFile(_ field: String, filename: String, callback: (Bool, SCError?) -> Void) {
         
         guard let id = _id else { return }
         
         SCAPI.sharedInstance.deleteFile(field, filename: filename, docId: id, collection: collection, callback: callback)
     }
     
-    public func getFile(field: String, filename: String, callback: (Bool, SCError?) -> Void) {
+    open func getFile(_ field: String, filename: String, callback: (Bool, SCError?) -> Void) {
         SCAPI.sharedInstance.getFile(self.collection, field: field, filename: filename, callback: callback)
     }
     
-    public func getFileLink(fieldName: String, callback: (Bool, SCError?, NSURL?) -> Void) {
+    open func getFileLink(_ fieldName: String, callback: (Bool, SCError?, URL?) -> Void) {
         if let filename = get(fieldName) as? String {
             SCAPI.sharedInstance.getFileLink(_collection, fieldName: fieldName, filename: filename, callback: callback)
         }

@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import SwiftyJSON
 
 public struct SCQuery {
     
@@ -56,25 +55,25 @@ public struct SCQuery {
     }
     
     // Поиск документов, на основе сформированного условия выборки. Возвращает ошибку или массив документов.
-    public func find(_ callback: (Bool, SCError?, [String: AnyObject]?) -> Void) {
+    public func find(_ callback: @escaping (Bool, SCError?, [String: AnyObject]?) -> Void) {
 
         SCAPI.sharedInstance.find(self, callback: callback)
     }
     
     // Подсчет количества документов в коллекции согласно условию выборки.
-    public func count(_ callback: (Bool, SCError?, Int?) -> Void) {
+    public func count(_ callback: @escaping (Bool, SCError?, Int?) -> Void) {
         
         SCAPI.sharedInstance.count(self, callback: callback)
     }
     
     // Обновляет документы соответствующие условию выборки.
-    public func update(_ update: SCUpdate, callback: (Bool, SCError?, [String: AnyObject]?) -> Void) {
+    public func update(_ update: SCUpdate, callback: @escaping (Bool, SCError?, [String: AnyObject]?) -> Void) {
         
         SCAPI.sharedInstance.update(self, update: update, callback: callback)
     }
     
     // Удаляет документы соответствующие условию выборки.
-    public func remove(_ callback: (Bool, SCError?, [String: AnyObject]?) -> Void) {
+    public func remove(_ callback: @escaping (Bool, SCError?, [String: AnyObject]?) -> Void) {
         
         SCAPI.sharedInstance.remove(self, callback: callback)
     }
@@ -104,7 +103,7 @@ public struct SCQuery {
         
         if let dataFromString = json.data(using: String.Encoding.utf8, allowLossyConversion: false) {
             let json = JSON(data: dataFromString)
-            _userQuery = json.dictionaryObject
+            _userQuery = json.dictionaryObject as [String : AnyObject]?
         }
     }
     

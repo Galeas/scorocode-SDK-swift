@@ -67,47 +67,47 @@ public enum SCUpdateOperator: Equatable {
         // TODO: $sort, $slice, $position
         case .push(let name, let value, let each):
             if !each {
-                return [name : value.apiValue]
+                return [name : value.apiValue] as AnyObject
             } else {
-                return [name: ["$each" : value.apiValue]]
+                return [name: ["$each" : value.apiValue]] as AnyObject
             }
     
         case .pull(let name, let value):
             if let val = value as? SCValue {
-                return [name : val.apiValue]
+                return [name : val.apiValue] as AnyObject
             } else {
                 let cond = value as! SCOperator
-                return [name : cond.dic]
+                return [name : cond.dic] as AnyObject
             }
 
         case .pullAll(let name, let value):
-            return [name : value.apiValue]
+            return [name : value.apiValue] as AnyObject
             
         case .addToSet(let name, let value, let each):
             if !each {
-                return [name : value.apiValue]
+                return [name : value.apiValue] as AnyObject
             } else {
-                return [name: ["$each" : value.apiValue]]
+                return [name: ["$each" : value.apiValue]] as AnyObject
             }
             
         case .pop(let name, let value):
-            return [name : SCInt(value).apiValue]
+            return [name : SCInt(value).apiValue] as AnyObject
             
         case .inc(let name, let value):
-            return [name : value.apiValue]
+            return [name : value.apiValue] as AnyObject
             
         case .currentDate(let name, let typeSpec):
             let value = ["$type" : typeSpec]
-            return [name : value]
+            return [name : value] as AnyObject
             
         case .mul(let name, let value):
-            return [name : value.apiValue]
+            return [name : value.apiValue] as AnyObject
             
         case .min(let name, let value):
-            return [name : value.apiValue]
+            return [name : value.apiValue] as AnyObject
             
         case .max(let name, let value):
-            return [name : value.apiValue]
+            return [name : value.apiValue] as AnyObject
         }
 
     }

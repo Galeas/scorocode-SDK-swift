@@ -89,7 +89,7 @@ public struct SCArray: SCValue {
     }
     
     public var apiValue: AnyObject {
-        return value.map({ $0.apiValue })
+        return value.map({ $0.apiValue }) as AnyObject
     }
 }
 

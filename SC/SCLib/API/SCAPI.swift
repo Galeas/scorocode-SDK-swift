@@ -8,7 +8,6 @@
 
 import Foundation
 import Alamofire
-import SwiftyJSON
 
 public enum SCError {
     case system(String)
@@ -60,7 +59,7 @@ open class SCAPI {
         body[kEmail] = email
         body[kPassword] = password
         
-        Alamofire.request(SCAPIRouter.login(body)).responseJSON() {
+        Alamofire.request(SCAPIRouter.login(body as [String : AnyObject])).responseJSON() {
             responseJSON in
             guard responseJSON.result.error == nil else {
                 print(responseJSON.result.error)
@@ -69,13 +68,13 @@ open class SCAPI {
                 return
             }
             
-            if let responseValue: AnyObject = responseJSON.result.value {
+            if let responseValue: AnyObject = responseJSON.result.value as AnyObject? {
                 let response = JSON(responseValue)
                 if !response["error"].boolValue {
                     let result = response["result"].dictionaryValue
                     if let sessionId = result["sessionId"] {
                         self.sessionId = sessionId.stringValue
-                        callback(true, nil, response["result"].dictionaryObject)
+                        callback(true, nil, response["result"].dictionaryObject as [String : AnyObject]?)
                     }
                 } else {
                     callback(false, self.makeError(response), nil)
@@ -92,7 +91,7 @@ open class SCAPI {
         body[kClientKey] = clientId
         body[kSessionId] = sessionId
         
-        Alamofire.request(SCAPIRouter.logout(body)).responseJSON() {
+        Alamofire.request(SCAPIRouter.logout(body as [String : AnyObject])).responseJSON() {
             responseJSON in
             guard responseJSON.result.error == nil else {
                 print(responseJSON.result.error)
@@ -101,7 +100,7 @@ open class SCAPI {
                 return
             }
             
-            if let responseValue: AnyObject = responseJSON.result.value {
+            if let responseValue: AnyObject = responseJSON.result.value as AnyObject? {
                 let response = JSON(responseValue)
                 if !response["error"].boolValue {
                     callback(true, nil)
@@ -131,10 +130,10 @@ open class SCAPI {
                 return
             }
             
-            if let responseValue: AnyObject = responseJSON.result.value {
+            if let responseValue: AnyObject = responseJSON.result.value as AnyObject? {
                 let response = JSON(responseValue)
                 if !response["error"].boolValue {
-                    callback(true, nil, response["result"].dictionaryObject)
+                    callback(true, nil, response["result"].dictionaryObject as [String : AnyObject]?)
                 } else {
                     callback(false, self.makeError(response), nil)
                 }
@@ -172,11 +171,11 @@ open class SCAPI {
                 return
             }
             
-            if let responseValue: AnyObject = responseJSON.result.value {
+            if let responseValue: AnyObject = responseJSON.result.value as AnyObject? {
                 let response = JSON(responseValue)
                 
                 if !response["error"].boolValue {
-                    callback(true, nil, response["result"].dictionaryObject)
+                    callback(true, nil, response["result"].dictionaryObject as [String : AnyObject]?)
                 } else {
                     callback(false, self.makeError(response), nil)
                 }
@@ -207,10 +206,10 @@ open class SCAPI {
                 return
             }
             
-            if let responseValue: AnyObject = responseJSON.result.value {
+            if let responseValue: AnyObject = responseJSON.result.value as AnyObject? {
                 let response = JSON(responseValue)
                 if !response["error"].boolValue {
-                    callback(true, nil, response["result"].dictionaryObject)
+                    callback(true, nil, response["result"].dictionaryObject as [String : AnyObject]?)
                 } else {
                     callback(false, self.makeError(response), nil)
                 }
@@ -238,10 +237,10 @@ open class SCAPI {
                 return
             }
             
-            if let responseValue: AnyObject = responseJSON.result.value {
+            if let responseValue: AnyObject = responseJSON.result.value as AnyObject? {
                 let response = JSON(responseValue)
                 if !response["error"].boolValue {
-                    callback(true, nil, response["result"].dictionaryObject)
+                    callback(true, nil, response["result"].dictionaryObject as [String : AnyObject]?)
                 } else {
                     callback(false, self.makeError(response), nil)
                 }
@@ -257,7 +256,8 @@ open class SCAPI {
         body[kAccessKey] = accessKey as AnyObject?
         body[kSessionId] = sessionId as AnyObject?
         body[kCollection] = obj.collection as AnyObject?
-        body[kQuery] = ["_id" : obj.id!]
+        let id = obj.id!
+        body[kQuery] = ["_id" : obj.id!] as AnyObject?
         body[kDoc] = makeBodyDoc(obj.update) as AnyObject?
         
         Alamofire.request(SCAPIRouter.updateById(body)).responseJSON() {
@@ -269,11 +269,11 @@ open class SCAPI {
                 return
             }
             
-            if let responseValue: AnyObject = responseJSON.result.value {
+            if let responseValue: AnyObject = responseJSON.result.value as AnyObject? {
                 let response = JSON(responseValue)
                 if !response["error"].boolValue {
                     let result = response["result"].dictionaryObject
-                    callback(true, nil, result)
+                    callback(true, nil, result as [String : AnyObject]?)
                 } else {
                     callback(false, self.makeError(response), nil)
                 }
@@ -317,7 +317,7 @@ open class SCAPI {
                 return
             }
             
-            if let responseValue: AnyObject = responseJSON.result.value {
+            if let responseValue: AnyObject = responseJSON.result.value as AnyObject? {
                 let response = JSON(responseValue)
                 if !response["error"].boolValue {
                     let base64String = response["result"].stringValue
@@ -351,7 +351,7 @@ open class SCAPI {
                 return
             }
             
-            if let responseValue: AnyObject = responseJSON.result.value {
+            if let responseValue: AnyObject = responseJSON.result.value as AnyObject? {
                 let response = JSON(responseValue)
                 if !response["error"].boolValue {
                     callback(true, nil, response["result"].intValue)
@@ -363,22 +363,26 @@ open class SCAPI {
     }
     
     open func getFile(_ collection: String, field: String, filename: String, callback: (Bool, SCError?) -> Void) {
-        
-        let destination = Alamofire.Request.suggestedDownloadDestination(directory: .documentDirectory, domain: .userDomainMask)
-        print("The file will be saved in \(destination)")
-        Alamofire.download(SCAPIRouter.getFile(collection, field, filename), destination: destination).progress { bytesRead, totalBytesRead, totalBytesExpectedToRead in
-            DispatchQueue.main.async {
-                print("Total bytes read on main queue: \(totalBytesRead)")
-            }
-            }
-            .response { _, _, _, error in
-                if let error = error {
-                    print("Failed with error: \(error)")
-                } else {
-                    print("Downloaded file successfully")
-                }
+        var localPath: URL? = nil
+        let downloadRequest = Alamofire.download(SCAPIRouter.getFile(collection, field, filename) as! URLConvertible, method: .get) { (url, response) -> (destinationURL: URL, options: DownloadRequest.DownloadOptions) in
+            let directoryURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+            let pathComponent = response.suggestedFilename
+            
+            localPath = directoryURL.appendingPathComponent(pathComponent!)
+            return (localPath!, DownloadRequest.DownloadOptions.createIntermediateDirectories)
         }
-
+        downloadRequest.downloadProgress { (progress) in
+            DispatchQueue.main.async {
+                print("Total bytes read on main queue: \(progress.totalUnitCount)")
+            }
+        }.response { (response) in
+            if let error = response.error {
+                print("Failed with error: \(error)")
+            }
+            else {
+                print("Downloaded file successfully")
+            }
+        }
     }
     
     open func getFileLink(_ collection: String, fieldName: String, filename: String, callback: @escaping (Bool, SCError?, URL?) -> Void) {
@@ -398,7 +402,7 @@ open class SCAPI {
                 return
             }
             
-            if let responseValue: AnyObject = responseJSON.result.value {
+            if let responseValue: AnyObject = responseJSON.result.value as AnyObject? {
                 let response = JSON(responseValue)
                 if !response["error"].boolValue {
                     callback(true, nil, response["result"].URL)
@@ -432,7 +436,7 @@ open class SCAPI {
                 return
             }
             
-            if let responseValue: AnyObject = responseJSON.result.value {
+            if let responseValue: AnyObject = responseJSON.result.value as AnyObject? {
                 let response = JSON(responseValue)
                 if !response["error"].boolValue {
                     callback(true, nil)
@@ -464,7 +468,7 @@ open class SCAPI {
                 return
             }
             
-            if let responseValue: AnyObject = responseJSON.result.value {
+            if let responseValue: AnyObject = responseJSON.result.value as AnyObject? {
                 let response = JSON(responseValue)
                 if !response["error"].boolValue {
                     callback(true, nil)
@@ -497,7 +501,7 @@ open class SCAPI {
                 return
             }
             
-            if let responseValue: AnyObject = responseJSON.result.value {
+            if let responseValue: AnyObject = responseJSON.result.value as AnyObject? {
                 let response = JSON(responseValue)
                 if !response["error"].boolValue {
                     callback(true, nil, response["count"].intValue)
@@ -528,7 +532,7 @@ open class SCAPI {
                 return
             }
             
-            if let responseValue: AnyObject = responseJSON.result.value {
+            if let responseValue: AnyObject = responseJSON.result.value as AnyObject? {
                 let response = JSON(responseValue)
                 if !response["error"].boolValue {
                     callback(true, nil, response["count"].intValue)
@@ -559,7 +563,7 @@ open class SCAPI {
                 return
             }
             
-            if let responseValue: AnyObject = responseJSON.result.value {
+            if let responseValue: AnyObject = responseJSON.result.value as AnyObject? {
                 let response = JSON(responseValue)
                 if !response["error"].boolValue {
                     callback(true, nil, response["count"].intValue)
@@ -590,7 +594,7 @@ open class SCAPI {
                 return
             }
             
-            if let responseValue: AnyObject = responseJSON.result.value {
+            if let responseValue: AnyObject = responseJSON.result.value as AnyObject? {
                 let response = JSON(responseValue)
                 if !response["error"].boolValue {
                     callback(true, nil)
@@ -616,10 +620,10 @@ open class SCAPI {
                 return
             }
             
-            if let responseValue: AnyObject = responseJSON.result.value {
+            if let responseValue: AnyObject = responseJSON.result.value as AnyObject? {
                 let response = JSON(responseValue)
                 if !response["error"].boolValue {
-                    callback(true, nil, response["result"].dictionaryObject)
+                    callback(true, nil, response["result"].dictionaryObject as [String : AnyObject]?)
                 } else {
                     callback(false, self.makeError(response), nil)
                 }
